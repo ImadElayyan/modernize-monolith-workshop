@@ -6,23 +6,14 @@
 </tbody></table></div>
 <div class="callout"><strong>The fallback is not the finished application.</strong><p>The supplied Module 3 starter targets .NET 10, but its <code>Program.cs</code> uses <code>UseInMemoryDatabase("StoreDatabase")</code>. It still includes Newtonsoft.Json and MVC code. Do not describe it as an already completed SQLite/Blazor migration or assume its data is persistent.</p></div>
 <details><summary>Copy the Module 3 fallback into a separate working folder</summary>
-<p>Use PowerShell; this assumes you cloned the reference repository as described on the setup page. Choose a fresh destination.</p>
-<pre><code>$ErrorActionPreference = 'Stop'
-$reference = Join-Path $HOME 'CopilotLabs\modernize-monolith-workshop'
-$working = Join-Path $HOME 'CopilotLabs\eshoplite-modernize'
-if (Test-Path $working) { throw 'Choose a new working folder; do not overwrite earlier work.' }
-Copy-Item -Recurse (Join-Path $reference '3-modernize-with-github-copilot\StartSample') $working
-Copy-Item (Join-Path $reference '.gitignore') (Join-Path $working '.gitignore')
-Copy-Item (Join-Path $reference 'LICENSE.md') (Join-Path $working 'LICENSE.md')
-Set-Location $working
-git init
-if ($LASTEXITCODE -ne 0) { throw 'Git initialization failed.' }
-git status --short</code></pre>
-<p>Review and commit the starter, then create a working branch (run each command separately and stop on failure):</p>
-<pre><code>git add .
-git commit -m "Save Module 3 starter"
-git switch -c student/code-modernization
-dotnet restore .\eShopLite.sln
+<p>This works with either a cloned repository or an extracted ZIP. No second download is needed.</p>
+<ol>
+<li>In your full repository folder, open <code>3-modernize-with-github-copilot</code> and copy <code>StartSample</code> to a new location outside the repository, such as <code>C:\Labs\eShopLite-Module3</code>. Do not overwrite your Module 2B work.</li>
+<li>Copy the repository's root <code>.gitignore</code> and <code>LICENSE.md</code> into that working folder.</li>
+<li>Open the copied <code>eShopLite.sln</code> in Visual Studio. Use <strong>Git &gt; Create Git Repository &gt; Local only</strong> for that folder, review the files, and save a baseline commit if one was not created automatically.</li>
+</ol>
+<p>Build and run in Visual Studio, or open PowerShell in the copied folder that contains <code>eShopLite.sln</code> and run these commands separately, stopping on any failure:</p>
+<pre><code>dotnet restore .\eShopLite.sln
 dotnet build .\eShopLite.sln
 dotnet run --project .\src\eShopLite.StoreCore\eShopLite.StoreCore.csproj</code></pre>
 <p>Open the URL in the console, inspect the app, then stop it with Ctrl+C before editing. These paths apply to the provided fallback only, not necessarily to an agent-generated upgrade.</p></details>

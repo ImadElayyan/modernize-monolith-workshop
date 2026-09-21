@@ -19,35 +19,29 @@
 dotnet --list-sdks
 sqllocaldb info</code></pre>
 <div class="checkpoint"><strong>Expected result</strong><p>Git reports its version; the SDK list includes a <code>10.0.x</code> entry. LocalDB is installed and the <code>MSSQLLocalDB</code> instance is available. If LocalDB is missing, use <a href="https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb">Microsoft's LocalDB setup guide</a> before continuing.</p></div>
-<h2 id="starter">3. Get an isolated copy of the legacy app</h2>
-<p>Use fresh folders. The repository copy is your reference; Copilot will work in a separate Git repository containing only the starter application. This follows the upstream warning to copy <code>StartSample</code> elsewhere, rather than letting the agent modify the complete workshop repository.</p>
-<p>Run this in PowerShell. If the paths already exist, choose new names; do not overwrite earlier lab work.</p>
-<pre><code>$ErrorActionPreference = 'Stop'
-$labs = Join-Path $HOME 'CopilotLabs'
-$reference = Join-Path $labs 'modernize-monolith-workshop'
-$working = Join-Path $labs 'eshoplite-upgrade'
-if ((Test-Path $reference) -or (Test-Path $working)) {
-    throw 'Choose new reference and working folder names before continuing.'
-}
-New-Item -ItemType Directory -Force -Path $labs | Out-Null
-git clone https://github.com/ImadElayyan/modernize-monolith-workshop.git $reference
-if ($LASTEXITCODE -ne 0) { throw 'Clone failed. Resolve the error before continuing.' }
-$starter = Join-Path $reference '2-upgrade-dotnet\2-upgrade-with-ghcp-modernization-app\StartSample'
-Copy-Item -Recurse -Path $starter -Destination $working
-Copy-Item (Join-Path $reference '.gitignore') (Join-Path $working '.gitignore')
-Copy-Item (Join-Path $reference 'LICENSE.md') (Join-Path $working 'LICENSE.md')
-Set-Location $working
-git init
-if ($LASTEXITCODE -ne 0) { throw 'Git initialization failed.' }
-git status --short</code></pre>
-<p>Review the listed files. After confirming there are no secrets or generated build artifacts, commit the baseline:</p>
-<pre><code>git add .
-git commit -m "Save original eShopLite starter"
-git switch -c student/modernization</code></pre>
-<p>Run the last three commands one at a time and stop if one fails. If Git asks for your identity, configure your own name and email in this local repository, then retry the commit. There is no need to push or publish student changes.</p>
-<h2 id="baseline">4. Run the original application</h2>
+<h2 id="starter">3. Clone or download the full repository</h2>
+<p>Get the complete repository, including every module and its starter files. Choose either option below; no setup script is needed.</p>
+<h3>Option A: Clone with Git</h3>
+<p>Open PowerShell in a folder where you want to keep the workshop, then run:</p>
+<pre><code>git clone https://github.com/ImadElayyan/modernize-monolith-workshop.git</code></pre>
+<p>This creates the <code>modernize-monolith-workshop</code> folder. If a folder with that name already exists, use a different location rather than overwriting earlier work.</p>
+<h3>Option B: Download ZIP</h3>
+<p><a class="button secondary" href="https://github.com/ImadElayyan/modernize-monolith-workshop/archive/refs/heads/main.zip">Download the full repository ZIP</a></p>
+<p>Alternatively, open the <a href="https://github.com/ImadElayyan/modernize-monolith-workshop">GitHub repository</a>, select <strong>Code &gt; Download ZIP</strong>, then use <strong>Extract All</strong> in Windows. Open the extracted <code>modernize-monolith-workshop-main</code> folder, not the ZIP itself.</p>
+<div class="callout"><strong>Full repository, focused live session.</strong><p>During the live workshop, we will work only on Module 2B (Copilot upgrade) and Module 3 (code modernization), after completing setup. Keep the remaining modules for self-paced practice afterward; nothing has been removed from the repository.</p></div>
+<p>Downloading a ZIP avoids cloning, but Git must still be installed for Copilot's branch and commit workflow. Copilot requires internet access; later deployment exercises also require an Azure subscription.</p>
+<h2 id="working-copy">4. Prepare the Module 2B starter</h2>
+<p>Keep your full download for later modules. The upstream guide recommends a separate working copy of the starter because the modernization agent creates branches and commits.</p>
 <ol>
-<li>In Visual Studio, open <code>eshoplite-upgrade\eShopLiteFx.sln</code> from your working folder.</li>
+<li>In File Explorer, open <code>2-upgrade-dotnet\2-upgrade-with-ghcp-modernization-app</code> inside your cloned or extracted repository.</li>
+<li>Copy the <code>StartSample</code> folder to a new location outside the repository, such as <code>C:\Labs\eShopLite</code>. The copied folder should contain <code>eShopLiteFx.sln</code> and <code>src</code>. Do not overwrite existing work.</li>
+<li>Copy <code>.gitignore</code> and <code>LICENSE.md</code> from the repository root into that working folder.</li>
+<li>Open <code>eShopLiteFx.sln</code> from the working folder in Visual Studio. Use <strong>Git &gt; Create Git Repository</strong>, select <strong>Local only</strong>, and confirm the repository path is the working folder.</li>
+<li>Review the files in Git Changes and save a baseline commit if Visual Studio has not already created one. Do not commit credentials or build artifacts. There is no need to publish this local repository to GitHub.</li>
+</ol>
+<h2 id="baseline">5. Run the original application</h2>
+<ol>
+<li>In Visual Studio, open <code>eShopLiteFx.sln</code> from the working folder you prepared above.</li>
 <li>Restore NuGet packages. Set <code>eShopLite.StoreFx</code> as the startup project if necessary.</li>
 <li>Use <strong>Build &gt; Build Solution</strong>, then run with IIS Express. Do not use <code>dotnet run</code> as the launch instruction for this legacy project.</li>
 <li>Check the home page, products, store information and product images. Record a few expected values or take your own screenshots for comparison.</li>
