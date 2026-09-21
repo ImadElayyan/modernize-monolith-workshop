@@ -6,7 +6,6 @@ on:
     paths:
       - "site/**"
       - "2-upgrade-dotnet/2-upgrade-with-ghcp-modernization-app/images/**"
-      - "3-modernize-with-github-copilot/images/**"
       - "LICENSE.md"
       - ".github/workflows/student-pages.yml"
   pull_request:
@@ -14,7 +13,6 @@ on:
     paths:
       - "site/**"
       - "2-upgrade-dotnet/2-upgrade-with-ghcp-modernization-app/images/**"
-      - "3-modernize-with-github-copilot/images/**"
       - "LICENSE.md"
       - ".github/workflows/student-pages.yml"
   workflow_dispatch:

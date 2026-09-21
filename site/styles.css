@@ -78,7 +78,7 @@ strong { color: var(--cp-text); }
 .lead { font-size: 19px; }
 .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; }
 .badge, .part-tag { background: var(--cp-accent-soft); color: var(--cp-accent); padding: 4px 12px; border-radius: 50px; font-size: 13px; font-family: "JetBrains Mono", Consolas, monospace; }
-.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 32px 0; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 32px 0; }
 .card { display: block; background: var(--cp-surface); color: var(--cp-text); border: 1px solid var(--cp-border); padding: 24px; border-radius: 12px; text-decoration: none; }
 .card:hover { border-color: var(--cp-accent); }
 .card h2 { font-size: 21px; margin: 12px 0; }

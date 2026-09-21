@@ -18,14 +18,12 @@ PAGES = [
     ("setup", "Prepare your environment", "BEFORE THE WORKSHOP"),
     ("assess", "Assess and plan", "LAB 1 / MODULE 2B"),
     ("upgrade", "Upgrade and verify", "LAB 2 / MODULE 2B"),
-    ("modernize", "Modernize the code", "LAB 3 / MODULE 3"),
     ("finish", "Review your results", "WRAP-UP"),
 ]
 IMAGES = {
     "upgrade-menu.png": "2-upgrade-dotnet/2-upgrade-with-ghcp-modernization-app/images/upgrade-with-copilot.png",
     "upgrade-plan.png": "2-upgrade-dotnet/2-upgrade-with-ghcp-modernization-app/images/upgrade-plan.png",
     "blazor-example.png": "2-upgrade-dotnet/2-upgrade-with-ghcp-modernization-app/images/blazor-page-example.png",
-    "modernize-menu.png": "3-modernize-with-github-copilot/images/upgrade-with-copilot-menu.png",
 }
 
 
