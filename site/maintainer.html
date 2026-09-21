@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Pages publishing guide</title>
+<script>
+(() => {
+  const param = new URLSearchParams(window.location.search).get("scoutTheme");
+  const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", theme);
+})();
+</script>
+<link rel="stylesheet" href="styles.css"></head>
+<body><main class="layout"><article>
+<h1>Maintain the focused student site</h1>
+<p>The site includes only setup, Module 2B and selected Module 3 exercises. Original sample applications and guides remain unchanged.</p>
+<h2>Build and preview locally</h2>
+<p>Use Python 3.12 or newer. There are no Python or JavaScript package dependencies. From the repository root:</p>
+<pre><code>python site\build.py
+python -m http.server 8769 --bind 127.0.0.1 --directory _site</code></pre>
+<p>Open <a href="http://127.0.0.1:8769/">http://127.0.0.1:8769/</a>. The build recreates only <code>_site</code>, copies the selected screenshots and MIT license, and checks all generated local links and fragment IDs. Do not edit generated HTML.</p>
+<h2>Content and presentation</h2>
+<p>Edit the landing page and six guide fragments in <code>site\content</code>. Shared layout, styles and behavior live in <code>template.html</code>, <code>styles.css</code> and <code>site.js</code>. Add any new local screenshot to the explicit map in <code>build.py</code>. Nothing outside that map is published.</p>
+<p>The user-selected visual theme follows the Copilot Dev Days Java workshop: dark grid, cyan/magenta accents, Space Grotesk and JetBrains Mono, landing cards and a step sidebar. Fonts load from Google Fonts with local system fallbacks. No analytics or external JavaScript is loaded. The default is dark; the theme switch carries the selection through page links.</p>
+<p>Do not label proposed pacing as an upstream duration, promise successful agent runs, or claim the fallback starter completes a student's upgrade. Verify changing tooling requirements against Microsoft Learn.</p>
+<h2>Publish after approval</h2>
+<ol>
+<li>Review the generated site and the repository diff before publishing.</li>
+<li>Push the reviewed branch and merge its changes into <code>main</code> only after approval.</li>
+<li>In the fork's <strong>Settings &gt; Pages</strong>, choose <strong>GitHub Actions</strong> as the source. Forked repositories may also require Actions to be enabled.</li>
+<li>Run <strong>Student workshop Pages</strong> from the Actions tab on <code>main</code>, or allow its push trigger to run.</li>
+<li>Wait for deployment to succeed and open the URL shown by the deployment. The expected default URL is <code>https://imadelayyan.github.io/modernize-monolith-workshop/</code>; do not announce it as live until the deployment succeeds.</li>
+</ol>
+<p>Pull requests build the site without deployment. Only <code>main</code> may deploy. The workflow uploads <code>_site</code>, not the complete repository or the unselected modules. This publishing guide is not part of the generated student site.</p>
+</article></main></body></html>

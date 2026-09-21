@@ -1,0 +1,64 @@
+<p class="lead">Prepare the Windows toolchain and establish a working baseline before asking Copilot to change anything.</p>
+<div class="callout"><strong>No Azure account, cloud resources or Docker required for this focused route.</strong>
+<p>The original .NET Framework web app needs Windows and Visual Studio's web build tools. A Linux Codespace is not a drop-in replacement for this starting point.</p></div>
+<h2 id="tools">1. Install the prerequisites</h2>
+<ul class="checklist">
+<li><label><input type="checkbox">Windows with permission to install development tools.</label></li>
+<li><label><input type="checkbox">Visual Studio 2026 recommended for this .NET 10 workshop; install the ASP.NET and web development workload.</label></li>
+<li><label><input type="checkbox">In Visual Studio Installer, enable the .NET desktop development workload's GitHub Copilot and GitHub Copilot app modernization optional components.</label></li>
+<li><label><input type="checkbox">.NET Framework 4.8 developer/targeting pack, .NET 10 SDK, IIS Express and SQL Server Express LocalDB.</label></li>
+<li><label><input type="checkbox">Git for Windows and a GitHub account signed into Visual Studio with Copilot enabled.</label></li>
+<li><label><input type="checkbox">Network access to GitHub, Copilot services and NuGet; sufficient Copilot usage quota for the workshop.</label></li>
+</ul>
+<p>Checkboxes are a convenience for this page visit; they are not submitted or saved.</p>
+<p><a href="https://learn.microsoft.com/en-us/dotnet/core/porting/github-copilot-upgrade/install">Current Microsoft installation guidance</a> supports paid or free Copilot and also lists VS 2022 17.14.17+ for the upgrade tooling. Tool availability does not by itself establish full .NET 10 IDE support; standardize on VS 2026 for this workshop. Organization policy and usage limits still apply. The upstream workshop recommends Copilot Pro.</p>
+<p>Useful downloads: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio</a>, <a href="https://dotnet.microsoft.com/download/dotnet/10.0">.NET 10</a>, <a href="https://dotnet.microsoft.com/download/dotnet-framework/net48">.NET Framework 4.8 developer pack</a>, <a href="https://git-scm.com/downloads/win">Git</a>.</p>
+<h2 id="verify-tools">2. Check the local tools</h2>
+<p>Open <strong>PowerShell</strong> and run:</p>
+<pre><code>git --version
+dotnet --list-sdks
+sqllocaldb info</code></pre>
+<div class="checkpoint"><strong>Expected result</strong><p>Git reports its version; the SDK list includes a <code>10.0.x</code> entry. LocalDB is installed and the <code>MSSQLLocalDB</code> instance is available. If LocalDB is missing, use <a href="https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb">Microsoft's LocalDB setup guide</a> before continuing.</p></div>
+<h2 id="starter">3. Get an isolated copy of the legacy app</h2>
+<p>Use fresh folders. The repository copy is your reference; Copilot will work in a separate Git repository containing only the starter application. This follows the upstream warning to copy <code>StartSample</code> elsewhere, rather than letting the agent modify the complete workshop repository.</p>
+<p>Run this in PowerShell. If the paths already exist, choose new names; do not overwrite earlier lab work.</p>
+<pre><code>$ErrorActionPreference = 'Stop'
+$labs = Join-Path $HOME 'CopilotLabs'
+$reference = Join-Path $labs 'modernize-monolith-workshop'
+$working = Join-Path $labs 'eshoplite-upgrade'
+if ((Test-Path $reference) -or (Test-Path $working)) {
+    throw 'Choose new reference and working folder names before continuing.'
+}
+New-Item -ItemType Directory -Force -Path $labs | Out-Null
+git clone https://github.com/ImadElayyan/modernize-monolith-workshop.git $reference
+if ($LASTEXITCODE -ne 0) { throw 'Clone failed. Resolve the error before continuing.' }
+$starter = Join-Path $reference '2-upgrade-dotnet\2-upgrade-with-ghcp-modernization-app\StartSample'
+Copy-Item -Recurse -Path $starter -Destination $working
+Copy-Item (Join-Path $reference '.gitignore') (Join-Path $working '.gitignore')
+Copy-Item (Join-Path $reference 'LICENSE.md') (Join-Path $working 'LICENSE.md')
+Set-Location $working
+git init
+if ($LASTEXITCODE -ne 0) { throw 'Git initialization failed.' }
+git status --short</code></pre>
+<p>Review the listed files. After confirming there are no secrets or generated build artifacts, commit the baseline:</p>
+<pre><code>git add .
+git commit -m "Save original eShopLite starter"
+git switch -c student/modernization</code></pre>
+<p>Run the last three commands one at a time and stop if one fails. If Git asks for your identity, configure your own name and email in this local repository, then retry the commit. There is no need to push or publish student changes.</p>
+<h2 id="baseline">4. Run the original application</h2>
+<ol>
+<li>In Visual Studio, open <code>eshoplite-upgrade\eShopLiteFx.sln</code> from your working folder.</li>
+<li>Restore NuGet packages. Set <code>eShopLite.StoreFx</code> as the startup project if necessary.</li>
+<li>Use <strong>Build &gt; Build Solution</strong>, then run with IIS Express. Do not use <code>dotnet run</code> as the launch instruction for this legacy project.</li>
+<li>Check the home page, products, store information and product images. Record a few expected values or take your own screenshots for comparison.</li>
+<li>Right-click the solution/project and confirm <strong>Modernize</strong> appears, or send <code>@Modernize</code> in Copilot Chat.</li>
+</ol>
+<details><summary>Missing csc.exe during the legacy build</summary>
+<p>The upstream guide documents this recovery command. Run it in Visual Studio's <strong>NuGet Package Manager Console</strong>, with the legacy project selected, not in ordinary PowerShell:</p>
+<pre><code>Update-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -r</code></pre>
+<p>Rebuild and inspect any remaining errors. This is a targeted recovery step, not a guarantee that other failures will disappear.</p></details>
+<details><summary>Database connection fails</summary>
+<p>The starter's <code>Web.config</code> points at <code>(LocalDb)\MSSQLLocalDB</code>, database <code>eShopLite</code>, using Windows authentication. Confirm the instance exists and can start. SQL Express installed without LocalDB does not satisfy this connection string automatically.</p></details>
+<details><summary>Modernize is missing or Copilot cannot respond</summary>
+<p>Check the installed optional components, Visual Studio version, GitHub sign-in and your organization's Copilot policy. Restart the IDE after installing components. Follow the current Microsoft installation guide rather than installing the traditional Upgrade Assistant as a substitute.</p></details>
+<div class="checkpoint"><strong>Ready to proceed</strong><p>The original app builds and runs, your baseline is committed in an isolated repository, and the modernization agent responds. If any of these fail, resolve them with the instructor before starting Lab 1.</p></div>

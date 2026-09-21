@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Generated student website
+/_site/
+
 # Database files and artifacts
 *.db
 *.db-shm

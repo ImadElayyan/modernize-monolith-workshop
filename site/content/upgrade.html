@@ -1,0 +1,54 @@
+<p class="lead">Carry out the reviewed Module 2B plan in checkpoints. A successful agent message is not the same as a working application.</p>
+<h2 id="framework">1. Finish the framework upgrade</h2>
+<ol>
+<li>Let Copilot apply the approved framework/package changes in your isolated repository.</li>
+<li>Inspect the resulting projects. Confirm the intended application targets <code>net10.0</code> and unsupported references were handled.</li>
+<li>Build the upgraded solution in Visual Studio. Resolve the actual compiler errors before progressing.</li>
+<li>Review <code>git diff</code> and commit a working checkpoint. Copilot may already have made commits; use <code>git log -5 --oneline</code> to understand the current state.</li>
+</ol>
+<p>Once the solution is SDK-style, CLI build commands are also available. From the folder containing the <strong>generated solution</strong>, run:</p>
+<pre><code>dotnet restore
+dotnet build</code></pre>
+<p>If multiple solution files remain, specify the actual upgraded solution filename. Do not assume the agent preserved the original name. Run commands separately and stop on failure.</p>
+<h2 id="database">2. Move the database to SQLite</h2>
+<pre><code>Continue the reviewed plan: migrate the sample data layer to SQLite.
+First inspect what the framework upgrade already changed.
+Use compatible EF Core packages and a local SQLite connection.
+Preserve the sample schema, seeded products and store information.
+Do not store credentials in code.
+Explain the database initialization strategy and how to verify persistence.
+Build and show the result before moving on.</code></pre>
+<p>Review the provider registration, connection configuration, seed logic and data access. Do not accept a configuration-only change if the pages still cannot load their data.</p>
+<details><summary>When EF migrations are actually needed</summary>
+<p>Inspect the generated code first: it may use migrations or <code>EnsureCreated</code>. Do not mix the two approaches blindly. If the plan uses migrations, confirm the EF CLI and design package match the project's EF Core version, inspect existing migrations, and choose the correct target/startup projects.</p>
+<p>Only for a single-project app using migrations, from that project directory, with no existing initial migration, these commands may apply:</p>
+<pre><code>dotnet ef migrations add InitialCreate
+dotnet ef database update</code></pre>
+<p>If the tool, DbContext or startup project cannot be found, resolve that specific error rather than repeatedly creating migrations.</p></details>
+<h2 id="frontend">3. Complete the Blazor conversion</h2>
+<pre><code>Continue the reviewed plan: convert the remaining MVC UI to Blazor.
+Inspect any Blazor work already completed and avoid duplicating it.
+Preserve product and store-information behavior, navigation and images.
+Use a coherent hosting model, routing and layout.
+Remove obsolete files only after their replacement works.
+Build, run and report which pages you verified.</code></pre>
+<p>Run the modernized web project using Visual Studio's startup profile. Check the URL reported by the application; do not assume the legacy IIS Express URL is still valid.</p>
+<figure><img src="assets/blazor-example.png" alt="Reference example of the modernized eShopLite Blazor application" loading="lazy"><figcaption>Reference appearance only. Your output may look different; the behavior checks below are the acceptance criteria.</figcaption></figure>
+<h2 id="acceptance">4. Verify the application yourself</h2>
+<ul class="checklist">
+<li><label><input type="checkbox">The upgraded solution builds without errors.</label></li>
+<li><label><input type="checkbox">The app starts and home, products and store-information pages load.</label></li>
+<li><label><input type="checkbox">Navigation, images and static assets work; no blank routes.</label></li>
+<li><label><input type="checkbox">The app uses SQLite and the expected sample data remains available after restart.</label></li>
+<li><label><input type="checkbox">The expected UI uses Blazor, not just renamed MVC files.</label></li>
+<li><label><input type="checkbox">You compared behavior against the original app, reviewed the diff and saved a working commit.</label></li>
+</ul>
+<details><summary>Build succeeds, but the app is incomplete</summary>
+<p>The upstream guide explicitly notes incomplete frontend migration, missing assets and data-loading problems. Capture the exact failing route, log or compiler error and ask for a targeted fix. Do not mark the upgrade complete solely because the agent reports success.</p>
+<pre><code>This check failed: [describe the exact behavior].
+Here is the relevant error or log: [paste non-sensitive details].
+Compare the implementation with our agreed migration plan.
+Explain the root cause, propose a focused fix, then rerun the failing check.
+Do not remove functionality or suppress errors to make the check pass.</code></pre></details>
+<div class="checkpoint"><strong>Lab 2 complete when</strong><p>The .NET 10 application runs with SQLite and the intended Blazor UI, and you have a reviewed working checkpoint. If you need the Module 3 fallback to continue, record the unfinished upgrade separately.</p></div>
+<p><a href="https://github.com/ImadElayyan/modernize-monolith-workshop/tree/main/2-upgrade-dotnet/2-upgrade-with-ghcp-modernization-app">Original Module 2B guide and troubleshooting</a></p>

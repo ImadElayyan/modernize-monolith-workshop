@@ -1,0 +1,56 @@
+name: Student workshop Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "2-upgrade-dotnet/2-upgrade-with-ghcp-modernization-app/images/**"
+      - "3-modernize-with-github-copilot/images/**"
+      - "LICENSE.md"
+      - ".github/workflows/student-pages.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "2-upgrade-dotnet/2-upgrade-with-ghcp-modernization-app/images/**"
+      - "3-modernize-with-github-copilot/images/**"
+      - "LICENSE.md"
+      - ".github/workflows/student-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Build site and check internal links
+        run: python site/build.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: student-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Deploy student site
+        id: deployment
+        uses: actions/deploy-pages@v4

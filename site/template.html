@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A focused, local-only .NET modernization workshop with GitHub Copilot: setup, Module 2B and Module 3.">
+  <title>$title | Modernize your monolith</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme = param === "light" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="icon" href="data:,">
+  <script defer src="assets/site.js"></script>
+</head>
+<body class="$body_class">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">.NET</span><span class="brand-title">App Modernization Workshop</span></a>
+    <div class="top-actions">
+      <a class="repo-link" href="https://github.com/ImadElayyan/modernize-monolith-workshop">Repository</a>
+      <button type="button" id="theme-toggle" hidden>Switch theme</button>
+      <span class="header-step-nav">$header_nav</span>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <p class="sidebar-title">WORKSHOP STEPS</p>
+      <nav aria-label="Workshop steps">$nav</nav>
+      <div class="scope-note"><strong>Local first. No Azure.</strong><p>One application, three hands-on stages. Only setup, Module 2B and Module 3.</p></div>
+    </aside>
+    <main id="main" tabindex="-1">
+      $heading
+      $content
+      <nav class="pager" aria-label="Page navigation">$previous $following</nav>
+      <footer>
+        <p>Adapted from <a href="https://github.com/Azure-Samples/modernize-monolith-workshop">Microsoft's Modernize your Monolith workshop</a>.
+        Original guides and screenshots: Microsoft Corporation, <a href="LICENSE.txt">MIT license</a>.</p>
+        <p>Theme inspired by the <a href="https://copilot-dev-days.github.io/appmod-workshop-java/">GitHub Copilot Dev Days Java workshop</a>. This .NET workshop is maintained in <a href="https://github.com/ImadElayyan/modernize-monolith-workshop">ImadElayyan's fork</a>.</p>
+        <p>This focused guide is not a guarantee of migration results or completion time. Copilot output and installed UI can vary.</p>
+      </footer>
+    </main>
+  </div>
+  <div id="copy-status" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>

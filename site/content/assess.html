@@ -1,0 +1,40 @@
+<p class="lead">Make the migration explicit before you execute it. This is the assessment and planning stage of Module 2B.</p>
+<div class="badges"><span class="badge">Input: working .NET Framework 4.8 app</span><span class="badge">Output: reviewed migration plan</span></div>
+<h2 id="start">1. Open the modernization agent</h2>
+<p>Open your isolated <code>eShopLiteFx.sln</code> in Visual Studio. Right-click the solution/project and select <strong>Modernize</strong>, or open Copilot Chat and enter <code>@Modernize</code>. Choose the .NET upgrade path if the installed version offers it.</p>
+<figure><img src="assets/upgrade-menu.png" alt="Upstream example showing the Modernize entry in Visual Studio" loading="lazy"><figcaption>Reference screenshot from Module 2B. Labels can differ between installed versions.</figcaption></figure>
+<h2 id="prompt">2. Request assessment before code changes</h2>
+<p>Use guided interaction and review proposed actions. The upstream guide demonstrates Autopilot, but this student route keeps the plan review explicit.</p>
+<pre><code>Assess this eShopLite solution for migration from .NET Framework 4.8
+to .NET 10. Work in this isolated application repository.
+
+Before changing application code:
+- Identify project types, NuGet packages and framework-specific APIs.
+- Inspect the current MVC frontend and database configuration.
+- Identify risks in moving EF6 and SQL Server LocalDB to EF Core and SQLite.
+- Identify the work needed to convert the UI to Blazor.
+- Produce an assessment and a staged upgrade plan.
+- Include build and behavior checks after each meaningful stage.
+
+Keep the application local. Do not provision Azure resources, introduce
+microservices, or add Aspire, Redis or AI features.
+Stop after the plan and wait for my review.</code></pre>
+<div class="checkpoint"><strong>Expected result</strong><p>A repository-specific assessment and staged plan describing the .NET 10 upgrade, dependencies and risks. The agent may create planning files. There is no fixed filename, response text or runtime that every student should expect.</p></div>
+<h2 id="review">3. Review and refine the generated plan</h2>
+<p>Open the generated plan in the editor. Confirm it covers all of the following; if it does not, add the missing requirements or ask Copilot to revise it:</p>
+<ul>
+<li><strong>Runtime:</strong> .NET 10 and an appropriate SDK-style project structure.</li>
+<li><strong>Database:</strong> SQLite with compatible EF Core packages, schema and seed data; preserve the behavior of the sample application.</li>
+<li><strong>Frontend:</strong> Blazor components with working routing, layouts and static assets.</li>
+<li><strong>Dependencies:</strong> replacements for unsupported APIs and packages, with explanations of breaking changes.</li>
+<li><strong>Checkpoints:</strong> build, run, inspect pages and data, review the diff, then commit.</li>
+</ul>
+<figure><img src="assets/upgrade-plan.png" alt="Example of an upgrade plan open for review in Visual Studio" loading="lazy"><figcaption>Review the plan generated for your own application; do not copy an unrelated assessment.</figcaption></figure>
+<h2 id="approval">4. Approve a bounded first stage</h2>
+<pre><code>The plan is reviewed. Start with the framework and package upgrade.
+Keep the .NET 10 target and the agreed local-only scope.
+Show the changes and build results before moving to database or UI work.
+If a step fails, explain the error and proposed fix instead of hiding it.</code></pre>
+<div class="callout"><strong>Do not approve commands blindly.</strong><p>Read requests that install packages, run scripts, remove files or change Git history. Never paste production connection strings, credentials or customer data into this sample exercise.</p></div>
+<div class="checkpoint"><strong>Lab 1 complete when</strong><p>You can explain the baseline, the three target changes and the validation plan. You have reviewed the plan and know which stage you approved next.</p></div>
+<p><a href="https://github.com/ImadElayyan/modernize-monolith-workshop/tree/main/2-upgrade-dotnet/2-upgrade-with-ghcp-modernization-app">Original Module 2B guide</a></p>
